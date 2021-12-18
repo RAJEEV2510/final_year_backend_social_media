@@ -218,6 +218,9 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+
+
+//signup
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -227,9 +230,12 @@ const signup = async (req, res, next) => {
   }
 
   const { name, email, password, username } = req.body;
+  
+  console.log(req.body)
   let existingUser;
   try {
     existingUser = await User.findOne({$or: [{ email: email} , {username:username}]});
+    console.log(existingUser)
   } catch (err) {
     const error = new HttpError(
       "Signing up failed, please try again later.",
@@ -249,6 +255,7 @@ const signup = async (req, res, next) => {
   let hashedPassword;
   try {
     hashedPassword = await bcrypt.hash(password, 12);
+    console.log(hashedPassword)
   } catch (err) {
     const error = new HttpError("Could not signup, please try again.", 500);
     return next(err);
@@ -269,7 +276,11 @@ const signup = async (req, res, next) => {
     "https://res.cloudinary.com/dmygcaifb/image/upload/v1586083005/covers/galshir-astronaut_2x_lu7vke.png",
     "https://res.cloudinary.com/dmygcaifb/image/upload/v1585951116/covers/15ca317faac1451c71d17229a9097c94_byyeza.png",
   ];
+
+
+  //create user 
   const RandomNo = Math.floor(Math.random() * 6);
+  console.log(User)
   const createdUser = new User({
     name,
     email,
@@ -280,8 +291,14 @@ const signup = async (req, res, next) => {
     cover: coversImages[RandomNo],
     publicId: null,
   });
+  console.log(createdUser)
   try {
-    await createdUser.save();
+    console.log("user")
+     createdUser.save().then((data)=>{
+       console.log(data)
+     });
+
+    console.log("user")
   } catch (err) {
     const error = new HttpError(
       "Signing up failed, please try again later.",
@@ -314,6 +331,10 @@ const signup = async (req, res, next) => {
   });
 };
 
+
+
+
+//login
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   let existingUser;

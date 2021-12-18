@@ -97,7 +97,7 @@ const userSchema = Schema({
 	},
 	posts:[{ type: mongoose.Types.ObjectId, required: true, ref: 'Post' }],
 	notifications:[{type:mongoose.Types.ObjectId,ref:'Notification'}],
-	friends:[{type:mongoose.Types.ObjectId,ref:"User",unique:true}],
+	friends:[{type:mongoose.Types.ObjectId,ref:"User"}],
 	unReadNotifications:{
 		type:Number,
 		default:0
